@@ -19,7 +19,7 @@ class UserRepository
         return $user;
     }
 
-    //vidio 31
+    //step31
     public function update(User $user): User {
         $statement = $this->connection->prepare("UPDATE users SET name = ?, password = ? WHERE id = ?");
         $statement->execute([
@@ -46,5 +46,25 @@ class UserRepository
     }finally {
         $statement->closeCursor();
     }
+    }
+
+    //step32
+    public function testUpdate()
+    {
+        $user = new User();
+        $user->id = "eko";
+        $user->name = "Eko";
+        $user->password = "rahasia";
+
+        $this->userRepository->save($user);
+
+        $user->name = "Budi";
+        $this->userRepository->update($user);
+
+        $result = $this->userRepository->findById($user->id);
+        
+        self::assertEquals($user->id, $result->id);
+        self::assertEquals($user->name, $result->name);
+        self::assertEquals($user->password, $result->password);
     }
 }
