@@ -61,15 +61,58 @@ class UserServiceTest extends TestCase
 
         this->excepException(ValidationException::class);
 
-        $user = new User();
+        $user = new UserRegisterRequest();
         $user ->id = "eko";
         $user ->name ="Eko";
         $user->password ="rahasia";
 
-        $this->userService->save($request);
+        $this->userService->register($request);
 
+    }
+    public function testLoginNotFound()
+    {
+        $this->expectException(ValidationException::class);
 
+        $request = new UserLoginRequest();
+        $request ->id = "eko";
+        $request ->password = "eko";
 
+        $this->userService->login($request);
+
+    }
+    public function testLoginWrongPassword()
+    {
+        $user = new User ();
+        $user ->id = "eko";
+        $user ->name = "Eko";
+        $user ->password = password_hash("eko", PASSWORD_BCRYPT);
+
+        $this->expectException (ValidationException::class);
+
+        $request = new UserLoginRequest();
+        $request ->id = "eko";
+        $request ->password = "salah";
+
+        $this->userService->login($request);
+
+    }
+    public function testLoginSucces()
+    {
+        $request = new User ();
+        $request ->id = "eko";
+        $request ->name = "Eko";
+        $request ->password = password_hash("eko", PASSWORD_BCRYPT);
+
+        $this->expectException (ValidationException::class);
+
+        $request = new UserLoginRequest();
+        $request ->id = "eko";
+        $request ->password = "salah";
+
+        $response =$this->userService->login($request);
+
+        self::assertEquals($request->id, $response->user->id);
+        self::assertTrue(password_verify($request->password, $response->user->password));
 
     }
         
