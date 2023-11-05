@@ -51,4 +51,28 @@ class UserService
         throw new ValidationException ("id, Name,Passwoard can not blank");
         }
    }
+   public function login(UserLoginRequest $request): UserLoginResponse
+   {
+    $this->validateUserLoginRequest($request);
+
+    $user = $this->userRepository->findById($request->id);
+    if($user == null){
+        throw new ValidationException("Id or password wrong");
+    }
+    if(password_verify($request->password, $user->password)){
+        $response = new UserLoginResponse();
+        $response->user= $user;
+        return $response;
+
+    }else{
+        throw new ValidationException("Id or password is wrong");
+    }
+
+   }
+   private function validateUserLoginRequest(UserLoginRequest $request){
+    if($request ->id == null || $request->name == null || $request->passwoard == null ||
+        trim ($request->id)== "" || trim($request->name)==""|| trim($request->passwoard)==""){
+        throw new ValidationException ("id, Name,Passwoard can not blank");
+        }
+   }
 }
