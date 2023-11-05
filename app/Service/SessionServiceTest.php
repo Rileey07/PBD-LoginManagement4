@@ -1,7 +1,15 @@
 <?php
 
-function setcookie(string $name, string $value){
-    echo "$name: $value"; 
+namespace video24 {
+    function header(string $value){
+        echo  $value;  
+}
+}
+namespace video24 {
+    function setcookie(string $name, string $value){
+        echo "$name: $value";  
+}
+
 }
 
 class SessionService  extends TestCase

@@ -4,13 +4,18 @@ namespace ProgrammerZamanNow\Belajar\PHP\MVC\Controller;
 
 class UserController
 {
-    private UserServise $userServise;
+    private UserService $userService;
+    private SessionService $SessionService;
 
     public function __constraction()
     {
         $connection = Database::getConnection();
         $userRepository = new UserRepository($connection);
         $this->userService = new UserService($userRepository);
+
+        $sessionRepository = new sessionRepository($connection);
+        $this->sessionservice = new SessionService($sessionRepository, $userRepository);
+
     }
 
 
@@ -50,7 +55,8 @@ class UserController
         $request->password = $_POST ['password'];
 
         try {
-            $this->userService->login($request);
+            $response = $this->userService->login($request);
+            $this->sessionService->create($response->user->id);
             View::redirect('/');
 
         }catch (ValidationException $exception){
@@ -60,6 +66,11 @@ class UserController
             ]);
 
         }
+
+    }
+    public function logout(){
+        $this->sessionService->destroy();
+        view::redirect("/");
 
     }
 }
