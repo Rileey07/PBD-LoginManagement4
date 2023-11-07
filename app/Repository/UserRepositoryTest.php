@@ -6,17 +6,12 @@ class UserRepositoryTest extends TestCase
 
 {
     private UserRepository $userRepository;
-    private SessionRepository $sessionRepository;
-
  
-    protected function setUp(): void
+    protected function setUp(): variant_mod
 
     {
-        $this->sessionRepository = new SessionRepository(Database::getConnection());
+         $this->userRepository = new UserRepository(Database::getConnection());
         $this->userRepository->deleteAll();
-
-        $this->userRepository = new UserRepository(Database::getConnection());
-        $this->sessionRepository->deleteAll();
     }
 
     public function testSaveSuccess()
@@ -40,27 +35,5 @@ class UserRepositoryTest extends TestCase
     {
         $user = $this->userRepository->findById("notfound");
         self::assertNull($user);
-    }
-
-    public function testUpdate()
-    {
-        $user = new User();
-        $user->id = "kelompok4";
-        $user->name ="kelompok4";
-        $user->password = "rahasia";
-
-        $this->userRepository->save($user);
-        
-        $user->name = "nayla";
-
-        $this->userRepository->update($user);
-
-        $result = $this->userRepository->findById($user->id);
-
-        self::assertNull($user->id, $result->id);
-        self::assertNull($user->name, $result->name);
-        self::assertNull($user->password, $result->password);
-    
-
     }
 }

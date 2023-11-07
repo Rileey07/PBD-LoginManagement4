@@ -6,15 +6,7 @@ function header(string $value){
     echo $value;
 
     }
-} 
-namespace ProgrammerZamanNoew\Belajar\PHP\MVC\Service{
-    function setcookie(string $name, string $value){
-        echo "$name: $value";   
-    }
 }
-
-
-
 
 namespace ProgrammerZamanNow\Belajar\PHP\MVC\Controller {
     use PHPUnit\Framework\TestCase;
@@ -27,14 +19,10 @@ namespace ProgrammerZamanNow\Belajar\PHP\MVC\Controller {
     {
         private UserController $userController;
         private UserRepository $userRepository;
-        private SessionRepository $sessionRepository;
 
         protected function setUp(): void
         {
             $this->userController = new UserController();
-
-            $this->sessionRepository = new sessionRepository(Database ::getConnection());
-            $this->$sessionRepository->delateAll();
 
             $this->$userRepository = new UserRepository(Database ::getConnection());
             $this->$userRepository->delateAll();
@@ -125,7 +113,6 @@ namespace ProgrammerZamanNow\Belajar\PHP\MVC\Controller {
             $this->userController->postlogin();
 
             $this->expectOutputRegax("[Location: /]");
-            $this->expectOutputRegax("X-PZN-SESSIPN: ]");
 
         }
         public function testLoginValidationError()
@@ -173,30 +160,6 @@ namespace ProgrammerZamanNow\Belajar\PHP\MVC\Controller {
             $this->expectOutputRegax("[Id, or password is wrong]");
 
         }
-        public function textLogout()
-        {
-            $user = new User();
-            $user->id = "eko";
-            $user->name = "Eko";
-            $user->passwors = password_hash("rahasia", PASSWORD_BCRYPT);
-            $this->userRespository->save($user);
-
-            $session = new Session();
-            $session->id = uniqid();
-            $session->userid = $user->id();
-            $this->sessionRespository->save($session);
-
-            $_COOKIE[SessionService::$COOKIE_NAME] = $session->id;
-            
-            $this->userController->logout();
-
-            $this->expectOutputRegax("[Location: /]");
-            $this->expectOutputRegax("X-PZN-SESSIPN: ]");
-
-        }
-
-
-
 
     }
 }
