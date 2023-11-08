@@ -1,9 +1,10 @@
 <?php
 
-namespace LOGINMANAGEMENT4\PhpLoginManagemen;
+namespace ProgrammerZamanNow\Belajar\PHP\MVC\App;
+
+use PHPUnit\Framework\TestCase;
 
 class ViewTest extends TestCase
-
 {
     public function testRender()
     {
@@ -18,4 +19,5 @@ class ViewTest extends TestCase
         $this->expectOutputRegex('[Login]');
         $this->expectOutputRegex('[Register]');
     }
+
 }

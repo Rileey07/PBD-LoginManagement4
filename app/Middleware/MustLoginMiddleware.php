@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammerZamanNow\Belajar\PHP\MVC\Controller;
+namespace ProgrammerZamanNow\Belajar\PHP\MVC\Middleware;
 
 use ProgrammerZamanNow\Belajar\PHP\MVC\App\View;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Config\Database;
@@ -8,35 +8,22 @@ use ProgrammerZamanNow\Belajar\PHP\MVC\Repository\SessionRepository;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Repository\UserRepository;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Service\SessionService;
 
-class HomeController
+class MustLoginMiddleware implements Middleware
 {
-
     private SessionService $sessionService;
 
     public function __construct()
     {
-        $connection = Database::getConnection();
-        $sessionRepository = new SessionRepository($connection);
-        $userRepository = new UserRepository($connection);
+        $sessionRepository = new SessionRepository(Database::getConnection());
+        $userRepository = new UserRepository(Database::getConnection());
         $this->sessionService = new SessionService($sessionRepository, $userRepository);
     }
 
-
-    function index()
+    function before(): void
     {
         $user = $this->sessionService->current();
         if ($user == null) {
-            View::render('Home/index', [
-                "title" => "PHP Login Management"
-            ]);
-        } else {
-            View::render('Home/dashboard', [
-                "title" => "Dashboard",
-                "user" => [
-                    "name" => $user->name
-                ]
-            ]);
+            View::redirect('/users/login');
         }
     }
-
 }

@@ -1,9 +1,10 @@
 <?php
 
-namespace LOGINMANAGEMENT4\PhpLoginManagement;
+namespace ProgrammerZamanNow\Belajar\PHP\MVC\Repository;
+
+use ProgrammerZamanNow\Belajar\PHP\MVC\Domain\User;
 
 class UserRepository
-
 {
     private \PDO $connection;
 
@@ -11,60 +12,47 @@ class UserRepository
     {
         $this->connection = $connection;
     }
-    public function save(User $user): User {
-        $statement = $this->connection->prepare("INSERT INTO users(id, name, password) VALUES (?, ?,?)");
+
+    public function save(User $user): User
+    {
+        $statement = $this->connection->prepare("INSERT INTO users(id, name, password) VALUES (?, ?, ?)");
         $statement->execute([
-            $use->id, $user->name, $user->password
+            $user->id, $user->name, $user->password
         ]);
         return $user;
     }
 
-    //step31
-    public function update(User $user): User {
+    public function update(User $user): User
+    {
         $statement = $this->connection->prepare("UPDATE users SET name = ?, password = ? WHERE id = ?");
         $statement->execute([
             $user->name, $user->password, $user->id
-            ]);
-            return $user;
+        ]);
+        return $user;
     }
 
-    public function findById(string $id): User {
-        $statement = $this->connection->prepare("SELECT users(id, name, password) VALUES (?, ?,?)");
-        $statement->execute([$ID]);
-
-    try {
-        if($row = $statement->fetch()){
-            $user = new User();
-            $user->id = $row['id'];
-            $user->name = $row['name'];
-            $user->password = $row['password'];
-            return $user;
-
-        }else{
-            return null;
-        }
-    }finally {
-        $statement->closeCursor();
-    }
-    }
-
-    //step32
-    public function testUpdate()
+    public function findById(string $id): ?User
     {
-        $user = new User();
-        $user->id = "eko";
-        $user->name = "Eko";
-        $user->password = "rahasia";
+        $statement = $this->connection->prepare("SELECT id, name, password FROM users WHERE id = ?");
+        $statement->execute([$id]);
 
-        $this->userRepository->save($user);
+        try {
+            if ($row = $statement->fetch()) {
+                $user = new User();
+                $user->id = $row['id'];
+                $user->name = $row['name'];
+                $user->password = $row['password'];
+                return $user;
+            } else {
+                return null;
+            }
+        } finally {
+            $statement->closeCursor();
+        }
+    }
 
-        $user->name = "Budi";
-        $this->userRepository->update($user);
-
-        $result = $this->userRepository->findById($user->id);
-        
-        self::assertEquals($user->id, $result->id);
-        self::assertEquals($user->name, $result->name);
-        self::assertEquals($user->password, $result->password);
+    public function deleteAll(): void
+    {
+        $this->connection->exec("DELETE from users");
     }
 }

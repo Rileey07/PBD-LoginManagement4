@@ -1,6 +1,6 @@
 <?php
 
-namespace LOGINMANAGEMENT4\PhpLoginManagement;
+namespace ProgrammerZamanNow\Belajar\PHP\MVC\App;
 
 class Router
 {

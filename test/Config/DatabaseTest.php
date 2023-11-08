@@ -1,6 +1,6 @@
 <?php
 
-namespace LOGINMANAGEMENT4\PhpLoginManagement;
+namespace ProgrammerZamanNow\Belajar\PHP\MVC\Config;
 
 use PHPUnit\Framework\TestCase;
 
@@ -16,6 +16,8 @@ class DatabaseTest extends TestCase
     {
         $connection1 = Database::getConnection();
         $connection2 = Database::getConnection();
-        self::assertNotNull($connection1, $connection2);
+        self::assertSame($connection1, $connection2);
     }
+
+
 }

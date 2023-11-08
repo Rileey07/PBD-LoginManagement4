@@ -2,9 +2,8 @@
 
 namespace ProgrammerZamanNow\Belajar\PHP\MVC\Model;
 
-class UserRegisterRequest
+class UserProfileUpdateRequest
 {
     public ?string $id = null;
     public ?string $name = null;
-    public ?string $password = null;
 }

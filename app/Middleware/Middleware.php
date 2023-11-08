@@ -1,6 +1,6 @@
 <?php
 
-namespace LOGINMANAGEMENT4\PhpLoginManagemen;
+namespace ProgrammerZamanNow\Belajar\PHP\MVC\Middleware;
 
 interface Middleware
 {

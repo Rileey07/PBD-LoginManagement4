@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammerZamanNow\Beljar\PHP\MVC\Repository;
+namespace ProgrammerZamanNow\Belajar\PHP\MVC\Repository;
 
 use ProgrammerZamanNow\Belajar\PHP\MVC\Domain\Session;
 
@@ -10,44 +10,44 @@ class SessionRepository
 
     public function __construct(\PDO $connection)
     {
-
+        $this->connection = $connection;
     }
-    public function save (Session $session): Session 
+
+    public function save(Session $session): Session
     {
-        $this->connection->prepare("INSERT INTO session(id, user_id) VALUES(?, ?)");
-        $statement->execute([$sesssion->id, $session->user_id]);
+        $statement = $this->connection->prepare("INSERT INTO sessions(id, user_id) VALUES (?, ?)");
+        $statement->execute([$session->id, $session->userId]);
         return $session;
     }
-    public function finfByIId(string $id): ?Session
+
+    public function findById(string $id): ?Session
     {
-        $statement=this->connection->prepare("SELECT id, user_id from session WHERE id =?");
+        $statement = $this->connection->prepare("SELECT id, user_id from sessions WHERE id = ?");
         $statement->execute([$id]);
 
-        try{
-            if($row = $statement->fect()){
+        try {
+            if($row = $statement->fetch()){
                 $session = new Session();
                 $session->id = $row['id'];
-                $session->userId= $row ['user_id'];
+                $session->userId = $row['user_id'];
                 return $session;
-
             }else{
                 return null;
             }
         } finally {
             $statement->closeCursor();
         }
-
     }
-    public function delateById(string $id) : void
+
+    public function deleteById(string $id): void
     {
-        $this->connection->prepare("DELETE FROM session WHERE id=?");
+        $statement = $this->connection->prepare("DELETE FROM sessions WHERE id = ?");
         $statement->execute([$id]);
-
     }
-    public function delateAll(): void 
-    {
-        $this->connection->exec("DELATE FROM session");
 
+    public function deleteAll(): void
+    {
+        $this->connection->exec("DELETE FROM sessions");
     }
 
 }
